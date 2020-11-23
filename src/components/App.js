@@ -7,18 +7,23 @@ function App() {
   const [value, setValue] = useState('');
   const [dbValue, saveToDb] = useState(''); // would be an API call normally
 
+  // debounce using  useCallback;
   const debouncedSave = useCallback(
     debounce((nextValue) => saveToDb(nextValue), 1000),
     []
   );
 
-  //      debounce(() => saveToDb(nextValue), 1000);
+  // debouncing using useRef instead
+
+  const debouncedSave2 = useRef(
+    debounce((nextValue) => saveToDb(nextValue), 1000)
+  ).current;
 
   const handleChange = (event) => {
     const nextValue = event.target.value;
     setValue(nextValue);
 
-    debouncedSave(nextValue);
+    debouncedSave2(nextValue);
   };
 
   return (
