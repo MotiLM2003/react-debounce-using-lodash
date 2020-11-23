@@ -1,14 +1,24 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import debounce from 'lodash.debounce';
 
-import './App.css';
+import '../App.css';
 
 function App() {
   const [value, setValue] = useState('');
   const [dbValue, saveToDb] = useState(''); // would be an API call normally
 
+  const debouncedSave = useCallback(
+    debounce((nextValue) => saveToDb(nextValue), 1000),
+    []
+  );
+
+  //      debounce(() => saveToDb(nextValue), 1000);
+
   const handleChange = (event) => {
-    setValue(event.target.value);
+    const nextValue = event.target.value;
+    setValue(nextValue);
+
+    debouncedSave(nextValue);
   };
 
   return (
